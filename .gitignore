@@ -1,0 +1,34 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Runtime data (sessions, mappings, uploads — never commit)
+# These live at ~/.pii_shield/ and are not in this repo
+
+# Temp / OS files
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
+
+# Secrets / env
+.env
+*.env

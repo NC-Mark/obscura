@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBSCURA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════
+   OBSCURA — DIGITAL BRUTALISM UI
+   ══════════════════════════════════════════════ */
+
+/* ── Light mode (default) ── */
+:root, [data-theme="light"] {
+  --person:      #0047FF; --person-bg:   #C8D9FF;
+  --org:         #7B00D4; --org-bg:      #E6C8FF;
+  --location:    #007A3D; --location-bg: #B3F0CE;
+  --comm:        #B84500; --comm-bg:     #FFD9B3;
+  --id:          #CC0066; --id-bg:       #FFB3D9;
+  --fin:         #CC2200; --fin-bg:      #FFD0CC;
+  --health:      #006B5E; --health-bg:   #B3F0E8;
+  --other:       #333333; --other-bg:    #E8E8E8;
+
+  --accent:      #0047FF;
+  --accent-dk:   #0035CC;
+  --accent-fg:   #FFFFFF;
+  --danger:      #CC0000;
+  --danger-fg:   #FFFFFF;
+  --success:     #007A3D;
+  --success-fg:  #FFFFFF;
+  --warn:        #B84500;
+
+  --bg:          #F0EBE0;
+  --surface:     #FAFAF8;
+  --border:      #0A0A0A;
+  --border-w:    2px;
+  --text:        #0A0A0A;
+  --muted:       #555555;
+  --shadow:      3px 3px 0 #0A0A0A;
+  --shadow-lg:   5px 5px 0 #0A0A0A;
+  --shadow-btn:  2px 2px 0 #0A0A0A;
+  --radius:      0px;
+  --topbar:      56px;
+  --nav:         48px;
+}
+
+/* ── Dark mode ── */
+[data-theme="dark"] {
+  --person:      #7AABF0; --person-bg:   #0D1E38;
+  --org:         #B87EE8; --org-bg:      #221038;
+  --location:    #4EC98A; --location-bg: #0A2418;
+  --comm:        #E0883A; --comm-bg:     #301800;
+  --id:          #E06898; --id-bg:       #300018;
+  --fin:         #D96848; --fin-bg:      #301008;
+  --health:      #3ABFB0; --health-bg:   #082824;
+  --other:       #AAAAAA; --other-bg:    #222222;
+
+  --accent:      #C86820;
+  --accent-dk:   #A85518;
+  --accent-fg:   #F0EBE0;
+  --danger:      #D44040;
+  --danger-fg:   #F0EBE0;
+  --success:     #4ABF7A;
+  --success-fg:  #0A1A10;
+  --warn:        #C86820;
+
+  --bg:          #1A1A1A;
+  --surface:     #242424;
+  --border:      #686868;
+  --text:        #E8E4DC;
+  --muted:       #787878;
+  --shadow:      3px 3px 0 #686868;
+  --shadow-lg:   5px 5px 0 #686868;
+  --shadow-btn:  2px 2px 0 #686868;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: var(--bg); color: var(--text);
+  min-height: 100vh; font-size: 14px;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* ── Topbar ── */
+.topbar {
+  position: sticky; top: 0; z-index: 200;
+  height: var(--topbar);
+  background: var(--text); color: var(--bg);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  border-bottom: var(--border-w) solid var(--border);
+}
+.topbar-logo {
+  font-size: 20px; font-weight: 800; letter-spacing: -0.5px;
+  text-transform: uppercase;
+}
+.topbar-logo span { color: var(--accent); }
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.status-badge {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--muted); font-family: 'Space Mono', monospace;
+}
+.status-dot {
+  width: 8px; height: 8px;
+  background: var(--warn); outline: 2px solid var(--bg);
+  transition: background 0.3s;
+}
+.status-dot.ready  { background: var(--success); }
+.status-dot.error  { background: var(--danger); }
+.status-dot.loading { background: var(--warn); animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+/* theme toggle button */
+.theme-toggle {
+  background: none; border: var(--border-w) solid var(--bg);
+  color: var(--bg); font-family: 'Space Mono', monospace;
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  padding: 4px 10px; cursor: pointer; text-transform: uppercase;
+  transition: background 0.15s, color 0.15s;
+}
+.theme-toggle:hover { background: var(--bg); color: var(--text); }
+
+/* ── Tab nav ── */
+.tab-nav {
+  height: var(--nav);
+  background: var(--surface);
+  border-bottom: var(--border-w) solid var(--border);
+  display: flex; padding: 0 16px; gap: 0;
+  position: sticky; top: var(--topbar); z-index: 100;
+  overflow-x: auto;
+}
+.tab-btn {
+  padding: 0 16px; height: 100%;
+  background: none; border: none; border-bottom: 3px solid transparent;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.8px;
+  text-transform: uppercase; color: var(--muted);
+  cursor: pointer; transition: all 0.1s; white-space: nowrap;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── Layout ── */
+main { max-width: 1600px; margin: 0 auto; padding: 16px 20px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+.three-col { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+@media(max-width:768px) { .two-col,.three-col { grid-template-columns: 1fr; } }
+
+/* ── Cards ── */
+.card {
+  background: var(--surface);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+.card + .card { margin-top: 20px; }
+.card-title {
+  font-size: 10px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 2px; color: var(--muted); margin-bottom: 16px;
+  font-family: 'Space Mono', monospace;
+}
+
+/* ── Form elements ── */
+.field { margin-bottom: 16px; }
+.field label {
+  display: block; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--muted); margin-bottom: 6px;
+  font-family: 'Space Mono', monospace;
+}
+textarea, input[type=text], input[type=number], select {
+  width: 100%; padding: 9px 11px;
+  border: var(--border-w) solid var(--border);
+  background: var(--bg); color: var(--text);
+  font: inherit; font-size: 13px;
+  transition: box-shadow 0.1s;
+}
+textarea:focus, input:focus, select:focus {
+  outline: none;
+  box-shadow: 4px 4px 0 var(--accent);
+}
+textarea { resize: vertical; line-height: 1.6; }
+textarea.mono, .mono {
+  font-family: 'Space Mono', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 12px;
+}
+.field-row { display: grid; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 10px; margin-bottom: 14px; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px;
+  border: var(--border-w) solid var(--border);
+  background: var(--surface); color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+  cursor: pointer; white-space: nowrap;
+  box-shadow: var(--shadow-btn);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.btn:active:not(:disabled) { transform: translate(2px,2px); box-shadow: none; }
+.btn-primary {
+  background: var(--accent); color: var(--accent-fg);
+  border-color: var(--border);
+}
+.btn-primary:hover:not(:disabled) { background: var(--accent-dk); }
+.btn-ghost { background: var(--surface); color: var(--text); }
+.btn-ghost:hover:not(:disabled) { background: var(--bg); }
+.btn-danger { background: var(--danger); color: var(--danger-fg); border-color: var(--border); }
+.btn-success { background: var(--success); color: var(--success-fg); border-color: var(--border); }
+.btn-sm { padding: 4px 10px; font-size: 11px; box-shadow: 1px 1px 0 var(--border); }
+.btn-sm:active:not(:disabled) { transform: translate(1px,1px); box-shadow: none; }
+.btn-full { width: 100%; justify-content: center; }
+.btn-lg { padding: 12px 24px; font-size: 14px; box-shadow: var(--shadow); }
+.btn-lg:active:not(:disabled) { transform: translate(3px,3px); box-shadow: none; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+
+/* ── Entity badges & colors ── */
+.tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px;
+  border: 1px solid currentColor;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  font-family: 'Space Mono', monospace; text-transform: uppercase;
+  margin: 2px;
+}
+.c-person   { background: var(--person-bg);   color: var(--person);   }
+.c-org      { background: var(--org-bg);      color: var(--org);      }
+.c-location { background: var(--location-bg); color: var(--location); }
+.c-comm     { background: var(--comm-bg);     color: var(--comm);     }
+.c-id       { background: var(--id-bg);       color: var(--id);       }
+.c-fin      { background: var(--fin-bg);      color: var(--fin);      }
+.c-health   { background: var(--health-bg);   color: var(--health);   }
+.c-other    { background: var(--other-bg);    color: var(--other);    }
+
+mark.e {
+  padding: 1px 4px; cursor: default;
+  font-style: normal; text-decoration: none;
+  border-bottom: 2px solid currentColor;
+}
+mark.e.c-person   { background: var(--person-bg);   color: var(--person);   }
+mark.e.c-org      { background: var(--org-bg);      color: var(--org);      }
+mark.e.c-location { background: var(--location-bg); color: var(--location); }
+mark.e.c-comm     { background: var(--comm-bg);     color: var(--comm);     }
+mark.e.c-id       { background: var(--id-bg);       color: var(--id);       }
+mark.e.c-fin      { background: var(--fin-bg);      color: var(--fin);      }
+mark.e.c-health   { background: var(--health-bg);   color: var(--health);   }
+mark.e.c-other    { background: var(--other-bg);    color: var(--other);    }
+
+/* ── Stats bar — summary row ── */
+.stats-bar {
+  display: flex; gap: 0;
+  border: var(--border-w) solid var(--border);
+  margin: 14px 0 0; background: var(--surface);
+}
+.stat {
+  text-align: center; padding: 10px 20px;
+  border-right: var(--border-w) solid var(--border);
+  flex: 1;
+}
+.stat:last-child { border-right: none; }
+.stat-n { font-size: 22px; font-weight: 800; color: var(--accent); line-height: 1; font-family: 'Space Mono', monospace; }
+.stat-l { font-size: 8px; color: var(--muted); margin-top: 3px; letter-spacing: 0.8px; text-transform: uppercase; font-family: 'Space Mono', monospace; }
+
+/* ── Stats types — entity breakdown grid ── */
+.stats-types {
+  display: flex; flex-wrap: wrap; gap: 0;
+  border: var(--border-w) solid var(--border); border-top: none;
+  margin-bottom: 14px;
+}
+.stat-type {
+  text-align: center; padding: 6px 14px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  min-width: 80px; flex: 1 1 auto;
+}
+.stat-type:last-child { border-right: none; }
+.stat-type-n { font-size: 18px; font-weight: 800; line-height: 1; font-family: 'Space Mono', monospace; }
+.stat-type-l { font-size: 8px; margin-top: 2px; letter-spacing: 0.5px; text-transform: uppercase; font-family: 'Space Mono', monospace; opacity: 0.85; }
+
+/* ── Session ID chip ── */
+.sid-chip {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  background: var(--text); color: var(--bg);
+  border: var(--border-w) solid var(--border);
+  font-family: 'Space Mono', monospace; font-size: 13px;
+}
+.sid-chip .sid-val { flex: 1; color: var(--accent); }
+.chip-btn {
+  padding: 2px 8px;
+  background: transparent; border: 1px solid var(--bg);
+  color: var(--bg); font-size: 10px; cursor: pointer;
+  font-family: 'Space Mono', monospace; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.chip-btn:hover { background: var(--bg); color: var(--text); }
+
+/* ── Text output box ── */
+.text-box {
+  padding: 14px;
+  background: var(--bg); border: var(--border-w) solid var(--border);
+  min-height: 80px; line-height: 1.7;
+  white-space: pre-wrap; word-break: break-word;
+  font-size: 13px; position: relative;
+}
+.text-box-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.text-box-label {
+  font-size: 10px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  font-family: 'Space Mono', monospace;
+}
+
+/* ── Entity table ── */
+.entity-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.entity-table th {
+  text-align: left; padding: 8px 10px;
+  font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px; color: var(--muted);
+  border-bottom: var(--border-w) solid var(--border);
+  font-family: 'Space Mono', monospace;
+  background: var(--bg);
+}
+.entity-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+.entity-table tr:last-child td { border-bottom: none; }
+.entity-table tr:hover td { background: var(--bg); }
+
+/* ── Session history list ── */
+.sess-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px;
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-btn);
+  margin-bottom: 10px;
+  transition: box-shadow 0.1s, transform 0.1s;
+}
+.sess-item:hover { box-shadow: var(--shadow); }
+.sess-id { font-family: 'Space Mono', monospace; color: var(--accent); font-size: 13px; font-weight: 700; }
+.sess-meta { font-size: 11px; color: var(--muted); font-family: 'Space Mono', monospace; margin-top: 2px; }
+.sess-snippet { font-size: 12px; color: var(--muted); margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 280px; }
+
+/* ── Profiles ── */
+.profile-item {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 12px 14px;
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-btn);
+  margin-bottom: 10px; gap: 12px;
+  cursor: pointer;
+  transition: box-shadow 0.1s, transform 0.1s;
+}
+.profile-item:hover { box-shadow: var(--shadow); }
+.profile-item:active { transform: translate(2px,2px); box-shadow: none; }
+.profile-item.profile-selected {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-btn);
+  background: var(--surface);
+}
+.profile-item.profile-selected .profile-name { color: var(--accent); }
+.profile-name { font-weight: 800; font-size: 14px; letter-spacing: -0.3px; }
+.profile-meta { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: 'Space Mono', monospace; }
+
+/* ── Tag cloud ── */
+.tag-cloud { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+
+/* ── Alerts ── */
+.alert {
+  padding: 10px 14px;
+  font-size: 13px; margin: 10px 0; display: none;
+  border: var(--border-w) solid var(--border);
+  font-family: 'Space Mono', monospace;
+}
+.alert.show { display: block; }
+.alert-error   { background: var(--fin-bg);   color: var(--fin);   border-color: var(--danger); }
+.alert-success { background: var(--location-bg); color: var(--location); border-color: var(--success); }
+.alert-info    { background: var(--person-bg);  color: var(--person);  border-color: var(--accent); }
+
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  padding: 12px 20px;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+  font-family: 'Space Mono', monospace;
+  color: var(--bg); background: var(--text);
+  border: var(--border-w) solid var(--text);
+  box-shadow: var(--shadow);
+  transform: translateY(80px); opacity: 0; transition: all 0.25s;
+  pointer-events: none;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: var(--success); color: var(--success-fg); }
+.toast.error   { background: var(--danger);  color: var(--danger-fg); }
+.toast.warn    { background: var(--warn);    color: var(--bg); }
+
+/* ── Spinner ── */
+.spinner {
+  display: inline-block; width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.3); border-top-color: currentColor;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Empty state ── */
+.empty {
+  text-align: center; padding: 40px 20px;
+  color: var(--muted); font-size: 13px;
+  font-family: 'Space Mono', monospace;
+  border: 2px dashed var(--muted);
+  margin: 10px 0;
+}
+
+/* ── Section header ── */
+.section-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.section-hdr .card-title { margin: 0; }
+
+/* ── Mode toggle (TEXT/FILE) ── */
+.btn-group { display: flex; gap: 0; }
+.btn-group .btn-mode {
+  flex: 1; border: 2px solid var(--border); background: var(--bg);
+  color: var(--muted); font-weight: 700; letter-spacing: .06em;
+  box-shadow: none; border-radius: 0;
+}
+.btn-group .btn-mode:first-child { border-right-width: 1px; }
+.btn-group .btn-mode:last-child  { border-left-width: 1px; }
+.btn-group .btn-mode.active {
+  background: var(--border); color: var(--bg);
+}
+.btn-group .btn-mode:hover:not(.active) { background: var(--surface); color: var(--fg); }
+
+/* ── Drop zone ── */
+.drop-zone {
+  border: 3px dashed var(--border);
+  padding: 48px 24px; text-align: center; cursor: pointer;
+  transition: all 0.15s; background: var(--bg);
+  position: relative;
+}
+.drop-zone:hover, .drop-zone.over, .drop-zone.drag-over {
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+  background: var(--surface);
+}
+.drop-zone input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.drop-icon { font-size: 36px; margin-bottom: 12px; }
+.drop-label { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.drop-sub { font-size: 12px; color: var(--muted); font-family: 'Space Mono', monospace; }
+.drop-filename {
+  margin-top: 14px; padding: 8px 14px;
+  background: var(--surface);
+  border: var(--border-w) solid var(--border);
+  font-size: 12px; font-weight: 700; color: var(--accent);
+  font-family: 'Space Mono', monospace;
+  display: none;
+}
+
+/* ── Progress bar ── */
+.progress-wrap { margin: 14px 0; display: none; }
+.progress-bar {
+  height: 8px; background: var(--bg);
+  border: var(--border-w) solid var(--border);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--accent);
+  width: 35%;
+  animation: indeterminate 1.4s ease-in-out infinite;
+}
+@keyframes indeterminate {
+  0%   { transform: translateX(-200%); }
+  100% { transform: translateX(390%); }
+}
+.progress-label {
+  font-size: 10px; color: var(--muted); margin-top: 6px;
+  font-family: 'Space Mono', monospace; letter-spacing: 0.5px; text-transform: uppercase;
+}
+
+/* ── Utilities ── */
+.mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; }
+.mt-12 { margin-top: 12px; }
+.hidden { display: none !important; }
+.divider { border: none; border-top: var(--border-w) solid var(--border); margin: 18px 0; }
+code {
+  font-family: 'Space Mono', monospace;
+  background: var(--bg); padding: 1px 6px;
+  border: 1px solid var(--border); font-size: 11px;
+}
+</style>
+</head>
+<body>
+
+<!-- ── Topbar ── -->
+<header class="topbar">
+  <div class="topbar-logo">OBS<span>CURA</span></div>
+  <div class="topbar-right">
+    <div class="status-badge">
+      <div class="status-dot loading" id="statusDot"></div>
+      <span id="statusText">Connecting...</span>
+    </div>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">◐ Dark</button>
+  </div>
+</header>
+
+<!-- ── Tab nav ── -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="anonymize">Anonymize Text</button>
+  <button class="tab-btn" data-tab="upload">Anonymize File</button>
+  <button class="tab-btn" data-tab="deanonymize">Deanonymize</button>
+  <button class="tab-btn" data-tab="sessions">Sessions</button>
+  <button class="tab-btn" data-tab="profiles">Profiles</button>
+  <button class="tab-btn" data-tab="stoplist">Stoplist</button>
+</nav>
+
+<main>
+
+<!-- ══════════════ ANONYMIZE TAB ══════════════ -->
+<div id="tab-anonymize" class="tab-panel active">
+  <div class="two-col">
+
+    <!-- Input -->
+    <div>
+      <div class="card">
+        <div class="card-title">Input Text</div>
+        <div class="field">
+          <textarea id="anonInput" rows="9" placeholder="Paste text containing PII here…&#10;&#10;Example: Please contact Sarah Jones at sarah@acme.com or call +44 7700 123456."></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field" style="margin:0">
+            <label>Domain</label>
+            <select id="anonDomain">
+              <option value="general">General</option>
+              <option value="financial">Financial</option>
+              <option value="legal">Legal</option>
+              <option value="healthcare">Healthcare</option>
+            </select>
+          </div>
+          <div class="field" style="margin:0">
+            <label>Profile</label>
+            <select id="anonProfile"><option value="">— none —</option></select>
+          </div>
+          <div class="field" style="margin:0">
+            <label>Language</label>
+            <select id="anonLang">
+              <option value="en">English</option>
+              <option value="de">German</option>
+              <option value="fr">French</option>
+              <option value="es">Spanish</option>
+              <option value="it">Italian</option>
+              <option value="nl">Dutch</option>
+            </select>
+          </div>
+          <div class="field" style="margin:0">
+            <label>Prefix (optional)</label>
+            <input type="text" id="anonPrefix" placeholder="e.g. DOC1_">
+          </div>
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" id="anonBtn" onclick="runAnonymize()">
+          Anonymize
+        </button>
+        <div class="progress-wrap" id="anonProgress">
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+          <div class="progress-label" id="anonProgressLabel">Detecting and anonymizing PII…</div>
+        </div>
+        <div id="anonErr" class="alert alert-error"></div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="anonResults" class="hidden">
+      <div class="card">
+        <div class="card-title">Results</div>
+
+        <div class="stats-bar" id="anonStats"></div>
+
+        <div class="field mb-12">
+          <label>Session ID</label>
+          <div class="sid-chip">
+            <span class="sid-val" id="anonSessionId"></span>
+            <button class="chip-btn" onclick="copy(anonSessionId.textContent)">Copy</button>
+          </div>
+        </div>
+
+        <div class="mb-12">
+          <div class="text-box-header">
+            <span class="text-box-label">Anonymized Text</span>
+            <button class="btn btn-ghost btn-sm" onclick="copy(anonOut.textContent)">Copy</button>
+          </div>
+          <div class="text-box mono" id="anonOut"></div>
+        </div>
+
+        <div class="mb-12" id="anonEntitySection">
+          <div class="text-box-label mb-12">Detected Entities</div>
+          <div id="anonTags"></div>
+          <table class="entity-table mt-12" id="anonTable">
+            <thead><tr><th>Placeholder</th><th>Type</th><th>Score</th></tr></thead>
+            <tbody id="anonTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="anonReviewBtn" onclick="startReview()" style="display:none">
+            Review Entities (HITL)
+          </button>
+          <button class="btn btn-success" onclick="deanonFromResult()">
+            Deanonymize Now
+          </button>
+        </div>
+      </div>
+
+      <div id="anonDeanonCard" class="card hidden" style="margin-top:16px">
+        <div class="section-hdr">
+          <div class="card-title">Restored Text</div>
+          <button class="btn btn-ghost btn-sm" onclick="copy(anonDeanonOut.textContent)">Copy</button>
+        </div>
+        <div class="text-box mono" id="anonDeanonOut"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ FILE UPLOAD TAB ══════════════ -->
+<div id="tab-upload" class="tab-panel">
+  <div class="two-col">
+
+    <div class="card">
+      <div class="card-title">Upload File to Anonymize</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">
+        Supports <strong>.docx .pdf .txt .csv .md .log</strong> — the anonymized file is kept locally and never leaves your machine.
+      </p>
+
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept=".docx,.pdf,.txt,.csv,.md,.log,.text">
+        <div class="drop-icon">📄</div>
+        <div class="drop-label">Drop a file here or click to browse</div>
+        <div class="drop-sub">.docx · .pdf · .txt · .csv · .md · .log</div>
+        <div class="drop-filename" id="dropFilename"></div>
+      </div>
+
+      <div class="field-row" style="margin-top:14px">
+        <div class="field" style="margin:0">
+          <label>Domain</label>
+          <select id="uploadDomain">
+            <option value="general">General</option>
+            <option value="financial">Financial</option>
+            <option value="legal">Legal</option>
+            <option value="healthcare">Healthcare</option>
+          </select>
+        </div>
+        <div class="field" style="margin:0">
+          <label>Profile</label>
+          <select id="uploadProfile"><option value="">— none —</option></select>
+        </div>
+        <div class="field" style="margin:0">
+          <label>Language</label>
+          <select id="uploadLang">
+            <option value="en">English</option>
+            <option value="de">German</option>
+            <option value="fr">French</option>
+            <option value="es">Spanish</option>
+          </select>
+        </div>
+        <div class="field" style="margin:0">
+          <label>Prefix (optional)</label>
+          <input type="text" id="uploadPrefix" placeholder="e.g. DOC1_">
+        </div>
+      </div>
+
+      <div class="progress-wrap" id="uploadProgress">
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div class="progress-label" id="uploadProgressLabel">Uploading and anonymizing — this may take a moment…</div>
+      </div>
+
+      <button class="btn btn-primary btn-full btn-lg" id="uploadBtn" onclick="runUpload()" style="margin-top:4px">
+        Anonymize File
+      </button>
+      <div id="uploadErr" class="alert alert-error"></div>
+    </div>
+
+    <div id="uploadResults" class="hidden">
+      <div class="card">
+        <div class="card-title">File Anonymized</div>
+
+        <div class="stats-bar" id="uploadStats"></div>
+
+        <div class="field mb-12">
+          <label>Session ID</label>
+          <div class="sid-chip">
+            <span class="sid-val" id="uploadSessionId"></span>
+            <button class="chip-btn" onclick="copy(uploadSessionId.textContent)">Copy</button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="downloadTxtBtn" onclick="downloadFile(false)">
+            ⬇ Download Anonymized File
+          </button>
+          <button class="btn btn-ghost" id="downloadDocxBtn" onclick="downloadFile(true)" style="display:none">
+            ⬇ Download as .docx
+          </button>
+          <button class="btn btn-ghost" id="uploadReviewBtn" onclick="startUploadReview()">
+            Review Entities (HITL)
+          </button>
+          <button class="btn btn-success hidden" id="reapplyBtn" onclick="reapplyReview()">
+            ✓ Apply Review &amp; Re-download
+          </button>
+        </div>
+
+        <div id="reviewStatusMsg" class="alert hidden" style="margin-top:10px"></div>
+
+        <hr class="divider">
+
+        <div id="uploadEntitySection">
+          <div class="text-box-label mb-12">Detected Entities</div>
+          <div id="uploadTags"></div>
+          <table class="entity-table mt-12">
+            <thead><tr><th>Placeholder</th><th>Type</th><th>Count</th></tr></thead>
+            <tbody id="uploadTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ DEANONYMIZE TAB ══════════════ -->
+<div id="tab-deanonymize" class="tab-panel">
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Restore PII</div>
+
+      <!-- Mode toggle -->
+      <div class="field">
+        <div class="btn-group" style="width:100%">
+          <button class="btn btn-sm btn-mode active" id="deanonModeText" onclick="setDeanonMode('text')">TEXT</button>
+          <button class="btn btn-sm btn-mode" id="deanonModeFile" onclick="setDeanonMode('file')">FILE</button>
+        </div>
+      </div>
+
+      <!-- Recent session picker -->
+      <div class="field">
+        <div class="section-hdr" style="margin-bottom:6px">
+          <label style="margin:0">Session</label>
+          <button class="btn btn-ghost btn-sm" onclick="toggleDeanonPicker()" id="deanonPickerToggle">▾ Recent sessions</button>
+        </div>
+        <input type="text" id="deanonSession" placeholder="e.g. a1b2c3d4e5f6" oninput="hideDeanonPicker()">
+        <div id="deanonPicker" class="hidden" style="margin-top:6px;max-height:220px;overflow-y:auto;border:1px solid var(--border);border-radius:6px"></div>
+      </div>
+
+      <!-- TEXT mode: textarea -->
+      <div id="deanonTextMode">
+        <div class="field">
+          <label>Anonymized Text (with placeholders)</label>
+          <textarea id="deanonInput" rows="10" class="mono" placeholder="Paste text containing &lt;PERSON_1&gt;, &lt;EMAIL_1&gt; etc…"></textarea>
+        </div>
+        <button class="btn btn-primary btn-full" id="deanonBtn" onclick="runDeanonymize()">Restore PII</button>
+      </div>
+
+      <!-- FILE mode: drop zone -->
+      <div id="deanonFileMode" style="display:none">
+        <div class="field">
+          <label>Anonymized Document</label>
+          <div id="deanonDropZone" class="drop-zone" onclick="deanonFileInput.click()"
+               ondragover="event.preventDefault();this.classList.add('drag-over')"
+               ondragleave="this.classList.remove('drag-over')"
+               ondrop="handleDeanonDrop(event)">
+            <div class="drop-icon">📂</div>
+            <div class="drop-label">Drop file or click to browse</div>
+            <div class="drop-hint">.docx · .txt · .md · .csv · .log</div>
+            <div id="deanonFileName" style="margin-top:8px;font-weight:600;color:var(--accent);display:none"></div>
+          </div>
+          <input type="file" id="deanonFileInput" accept=".docx,.txt,.md,.csv,.log,.text"
+                 style="display:none" onchange="deanonFileChosen(this.files[0])">
+        </div>
+        <button class="btn btn-primary btn-full" id="deanonFileBtn" onclick="runDeanonymizeFile()">Restore PII from File</button>
+      </div>
+
+      <div class="progress-wrap" id="deanonProgress">
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div class="progress-label">Restoring PII from session mapping…</div>
+      </div>
+      <div id="deanonErr" class="alert alert-error"></div>
+    </div>
+
+    <div class="card" id="deanonResult">
+      <div class="section-hdr">
+        <div class="card-title">Restored (<span id="deanonCount">0</span> entities)</div>
+        <button class="btn btn-ghost btn-sm hidden" id="deanonCopyBtn" onclick="copy(deanonOut.textContent)">Copy</button>
+        <a id="deanonDownloadBtn" class="btn btn-ghost btn-sm hidden" href="#" download>⬇ Download</a>
+      </div>
+      <div id="deanonEmpty" class="empty" style="margin-top:16px">Select a session on the left and click Restore PII.</div>
+      <div class="text-box mono" id="deanonOut" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SESSIONS TAB ══════════════ -->
+<div id="tab-sessions" class="tab-panel">
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Look Up Session</div>
+      <div class="field">
+        <label>Session ID</label>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="sessInput" placeholder="e.g. a1b2c3d4e5f6" style="flex:1">
+          <button class="btn btn-primary" onclick="lookupSession()">Look Up</button>
+        </div>
+      </div>
+      <div id="sessResult" class="hidden">
+        <div class="stats-bar" id="sessStats"></div>
+        <div class="text-box-label mb-12">Placeholders (no real values stored)</div>
+        <div id="sessTags"></div>
+        <div class="btn-row" style="margin-top:12px">
+          <button class="btn btn-primary btn-sm" id="sessRestoreBtn" onclick="fillDeanon(document.getElementById('sessInput').value.trim())">Restore PII</button>
+          <button class="btn btn-ghost btn-sm hidden" id="sessDownloadBtn" onclick="downloadSessionFile(document.getElementById('sessInput').value.trim(), false)">Download File</button>
+        </div>
+      </div>
+      <div id="sessErr" class="alert alert-error"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-hdr">
+        <div class="card-title">Recent Sessions</div>
+        <button class="btn btn-ghost btn-sm" onclick="renderHistory()">Refresh</button>
+      </div>
+      <div id="sessHistory"><div class="empty">Anonymize something to see session history.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PROFILES TAB ══════════════ -->
+<div id="tab-profiles" class="tab-panel">
+  <div class="two-col">
+    <div class="card">
+      <div class="section-hdr">
+        <div class="card-title">Saved Profiles</div>
+        <button class="btn btn-ghost btn-sm" onclick="loadProfiles()">Refresh</button>
+      </div>
+      <div id="profileList"><div class="empty">Loading…</div></div>
+    </div>
+
+    <div class="card">
+      <div class="section-hdr">
+        <div class="card-title" id="pfCardTitle">New Profile</div>
+        <button class="btn btn-ghost btn-sm" id="pfNewBtn" onclick="clearProfileForm()" style="display:none">✕ Clear</button>
+      </div>
+      <div id="pfEditBanner" class="alert alert-info" style="display:none;margin-bottom:12px"></div>
+      <div class="field">
+        <label>Name *</label>
+        <input type="text" id="pfName" placeholder="e.g. credit_desk">
+      </div>
+      <div class="field">
+        <label>Description</label>
+        <input type="text" id="pfDesc" placeholder="e.g. UK credit trading desk">
+      </div>
+      <div class="field-row">
+        <div class="field" style="margin:0">
+          <label>Base Domain</label>
+          <select id="pfDomain">
+            <option value="general">General</option>
+            <option value="financial">Financial</option>
+            <option value="legal">Legal</option>
+            <option value="healthcare">Healthcare</option>
+          </select>
+        </div>
+        <div class="field" style="margin:0">
+          <label>Min Score (0–1)</label>
+          <input type="number" id="pfScore" min="0" max="1" step="0.05" placeholder="0.50">
+        </div>
+      </div>
+      <div class="field">
+        <label>Extra Stoplist Terms (one per line — words that should NOT be anonymized)</label>
+        <textarea id="pfStoplist" rows="4" placeholder="Delta&#10;Gamma&#10;LIBOR&#10;SOFR"></textarea>
+      </div>
+      <div class="field">
+        <label>Custom Regex Patterns (JSON array)</label>
+        <textarea id="pfPatterns" rows="4" class="mono" placeholder='[{"name":"INTERNAL_ID","pattern":"ACC\\d{8}","score":0.9}]'></textarea>
+      </div>
+      <button class="btn btn-primary btn-full" id="pfSaveBtn" onclick="saveProfile()">Save Profile</button>
+      <div id="pfMsg" class="alert"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ STOPLIST TAB ══════════════ -->
+<div id="tab-stoplist" class="tab-panel">
+  <div class="card">
+    <div class="section-hdr">
+      <div class="card-title">Custom &amp; Learned Stoplists</div>
+      <div class="btn-row" style="margin:0">
+        <button class="btn btn-primary btn-sm" onclick="reloadTerms()">Reload Engine</button>
+        <button class="btn btn-ghost btn-sm" onclick="loadStoplist()">Refresh</button>
+      </div>
+    </div>
+    <div id="stoplistContent"><div class="empty">Loading…</div></div>
+    <div id="stoplistMsg" class="alert"></div>
+    <hr class="divider">
+    <div class="alert alert-info show">
+      To permanently add stoplist terms, edit <code>~/.pii_shield/custom/stoplist.txt</code>
+      (one term per line) then click <strong>Reload Engine</strong>.
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+
+// ── Constants ──────────────────────────────────────────────────────────────────
+const LS_SESSIONS = 'pii_sessions_v1';
+const LS_TAB      = 'pii_active_tab';
+
+const ENTITY_COLOR = {
+  PERSON: 'person', NRP: 'person',
+  ORGANIZATION: 'org',
+  LOCATION: 'location',
+  EMAIL_ADDRESS: 'comm', PHONE_NUMBER: 'comm', URL: 'comm', IP_ADDRESS: 'comm',
+  CREDIT_CARD: 'id', US_SSN: 'id', IBAN_CODE: 'id',
+  US_PASSPORT: 'id', US_DRIVER_LICENSE: 'id',
+  UK_NHS: 'health', UK_NIN: 'id', NPI: 'health', DEA_NUMBER: 'health',
+  MEDICARE_ID: 'health', MEDICAL_RECORD_NUMBER: 'health',
+  LEI: 'fin', ISIN: 'fin', CUSIP: 'fin', SWIFT_BIC: 'fin', FINANCIAL_ACCOUNT: 'fin',
+};
+function ecls(type) { return 'c-' + (ENTITY_COLOR[type] || 'other'); }
+
+// ── Helpers ────────────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function copy(text) {
+  navigator.clipboard.writeText(text)
+    .then(() => toast('Copied to clipboard', 'success'))
+    .catch(() => toast('Copy failed', 'error'));
+}
+
+let _toastTimer;
+function toast(msg, type = 'info') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (type !== 'info' ? ' ' + type : '');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => { el.className = 'toast'; }, 3000);
+}
+
+function showAlert(id, msg, type = 'error') {
+  const el = document.getElementById(id);
+  el.className = `alert alert-${type} show`;
+  el.textContent = msg;
+}
+function hideAlert(id) {
+  const el = document.getElementById(id);
+  el.className = 'alert';
+  el.textContent = '';
+}
+
+async function showProgress(id, label) {
+  const wrap = document.getElementById(id);
+  if (!wrap) return;
+  const lbl = wrap.querySelector('.progress-label');
+  if (lbl && label) lbl.textContent = label;
+  wrap.style.display = 'block';
+  // Yield to browser so it can repaint before the blocking API call
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+}
+function hideProgress(id) {
+  const wrap = document.getElementById(id);
+  if (wrap) wrap.style.display = 'none';
+}
+
+function setBusy(btnId, busy, label = null) {
+  const btn = document.getElementById(btnId);
+  btn.disabled = busy;
+  if (busy) {
+    btn._orig = btn.innerHTML;
+    btn.innerHTML = '<span class="spinner"></span> Working…';
+  } else {
+    btn.innerHTML = label || btn._orig || btn.innerHTML;
+  }
+}
+
+// ── Core API ───────────────────────────────────────────────────────────────────
+async function api(method, path, body = null) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(path, opts);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+// ── Status polling ─────────────────────────────────────────────────────────────
+async function pollStatus() {
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusText');
+  try {
+    const s = await api('GET', '/status');
+    if (s.status === 'ready') {
+      dot.className = 'status-dot ready';
+      txt.textContent = 'Ready';
+    } else {
+      dot.className = 'status-dot loading';
+      txt.textContent = s.message || s.phase || 'Loading…';
+      setTimeout(pollStatus, 2000);
+    }
+  } catch {
+    dot.className = 'status-dot error';
+    txt.textContent = 'Server offline';
+    setTimeout(pollStatus, 4000);
+  }
+}
+
+// ── Tabs ───────────────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    p.classList.toggle('active', p.id === 'tab-' + name);
+  });
+  localStorage.setItem(LS_TAB, name);
+  if (name === 'sessions') renderHistory();
+  if (name === 'deanonymize') autoLoadDeanon();
+  if (name === 'profiles') loadProfiles();
+  if (name === 'stoplist') loadStoplist();
+}
+
+// ── Session history (localStorage) ────────────────────────────────────────────
+function getSessions() {
+  try { return JSON.parse(localStorage.getItem(LS_SESSIONS) || '[]'); }
+  catch { return []; }
+}
+
+function saveSessionRecord(r) {
+  const sessions = getSessions();
+  const text = r.anonymized_text || '';
+  const isFile = text.startsWith('[file:');
+  sessions.unshift({
+    id: r.session_id,
+    ts: Date.now(),
+    entities: r.entities_confirmed,
+    by_type: r.by_type || {},
+    snippet: text.slice(0, 80),
+    anon_text: isFile ? '' : text,       // full text for restore-on-click
+    is_file: isFile,
+    filename: r.original_filename || '',
+    has_docx: !!r.docx_output_path,
+  });
+  localStorage.setItem(LS_SESSIONS, JSON.stringify(sessions.slice(0, 20)));
+}
+
+function renderHistory() {
+  const sessions = getSessions();
+  const el = document.getElementById('sessHistory');
+  if (!sessions.length) {
+    el.innerHTML = '<div class="empty">No sessions yet. Anonymize some text first.</div>';
+    return;
+  }
+  el.innerHTML = sessions.map(s => `
+    <div class="sess-item">
+      <div style="flex:1;min-width:0">
+        <div class="sess-id">${esc(s.id)}</div>
+        <div class="sess-meta">${new Date(s.ts).toLocaleString()} · ${s.entities || 0} entities · ${Object.keys(s.by_type || {}).join(', ')}</div>
+        <div class="sess-snippet">${esc(s.snippet || '')}${s.snippet ? '…' : ''}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;margin-left:10px;flex-shrink:0">
+        <button class="btn btn-sm btn-primary" onclick="fillDeanon('${esc(s.id)}')">Restore PII</button>
+        ${s.is_file ? `<button class="btn btn-sm btn-ghost" onclick="downloadSessionFile('${esc(s.id)}', false)">⬇ File</button>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function fillDeanon(sid) {
+  const sessions = getSessions();
+  const s = sessions.find(x => x.id === sid);
+  document.getElementById('deanonSession').value = sid;
+  if (s && s.anon_text) {
+    setDeanonMode('text');
+    document.getElementById('deanonInput').value = s.anon_text;
+  }
+  hideDeanonPicker();
+  switchTab('deanonymize');
+}
+
+function downloadSessionFile(sid, preferDocx) {
+  const url = `/download/${sid}${preferDocx ? '?docx=true' : ''}`;
+  const a = document.createElement('a');
+  a.href = url; a.download = ''; a.click();
+}
+
+// ── Deanon session picker ──────────────────────────────────────────────────────
+function autoLoadDeanon() {
+  // Always rebuild picker so it's fresh
+  renderDeanonPicker(false);
+  // If session field is empty, pre-fill with most recent session
+  const sidEl = document.getElementById('deanonSession');
+  if (sidEl.value.trim()) return;   // user already has one loaded
+  const sessions = getSessions();
+  if (!sessions.length) return;
+  const s = sessions[0];  // most recent
+  sidEl.value = s.id;
+  if (s.anon_text) {
+    setDeanonMode('text');
+    document.getElementById('deanonInput').value = s.anon_text;
+  }
+}
+
+function renderDeanonPicker(show) {
+  const sessions = getSessions();
+  const picker = document.getElementById('deanonPicker');
+  if (!sessions.length) {
+    picker.innerHTML = '<div class="empty" style="padding:10px">No sessions yet.</div>';
+  } else {
+    picker.innerHTML = sessions.map(s => `
+      <div class="sess-item" style="cursor:pointer;padding:8px 10px" onclick="pickDeanonSession('${esc(s.id)}')">
+        <div style="flex:1;min-width:0">
+          <div class="sess-id">${esc(s.id)}</div>
+          <div class="sess-meta">${new Date(s.ts).toLocaleString()} · ${s.entities || 0} entities${s.filename ? ' · ' + esc(s.filename) : ''}</div>
+          <div class="sess-snippet" style="font-style:italic">${s.is_file ? '📄 file upload' : esc((s.snippet || '').slice(0, 60)) + (s.snippet ? '…' : '')}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+  if (show) picker.classList.remove('hidden');
+}
+
+function toggleDeanonPicker() {
+  const picker = document.getElementById('deanonPicker');
+  if (picker.classList.contains('hidden')) {
+    renderDeanonPicker(true);
+  } else {
+    picker.classList.add('hidden');
+  }
+}
+
+function hideDeanonPicker() {
+  document.getElementById('deanonPicker').classList.add('hidden');
+}
+
+function pickDeanonSession(sid) {
+  const sessions = getSessions();
+  const s = sessions.find(x => x.id === sid);
+  document.getElementById('deanonSession').value = sid;
+  if (s && s.anon_text) {
+    document.getElementById('deanonInput').value = s.anon_text;
+  }
+  hideDeanonPicker();
+}
+
+// ── Placeholder highlighting ───────────────────────────────────────────────────
+function highlightPlaceholders(text, entities) {
+  // Build a map from placeholder → type
+  const typeMap = {};
+  (entities || []).forEach(e => { if (e.placeholder) typeMap[e.placeholder] = e.type; });
+
+  // Escape the whole text first, then replace placeholders
+  let html = esc(text);
+  Object.entries(typeMap).forEach(([ph, type]) => {
+    const escaped_ph = esc(ph);
+    const cls = ecls(type);
+    html = html.split(escaped_ph).join(
+      `<mark class="e ${cls}" title="${esc(type)}">${escaped_ph}</mark>`
+    );
+  });
+  // Also catch any remaining <TYPE_N> patterns not in the entity list
+  html = html.replace(/&lt;([A-Z_]+)_(\d+)&gt;/g, (m, type) =>
+    `<mark class="e ${ecls(type)}" title="${type}">&lt;${type}_$2&gt;</mark>`
+  );
+  return html;
+}
+
+// ── Anonymize ─────────────────────────────────────────────────────────────────
+let _currentSid = null;
+let _currentEntities = [];
+let _currentAnonText = '';
+
+async function runAnonymize() {
+  const text = document.getElementById('anonInput').value.trim();
+  if (!text) { toast('Enter some text first', 'warn'); return; }
+
+  setBusy('anonBtn', true);
+  hideAlert('anonErr');
+  document.getElementById('anonResults').classList.add('hidden');
+  document.getElementById('anonDeanonCard').classList.add('hidden');
+  await showProgress('anonProgress', 'Detecting entities…');
+
+  try {
+    const r = await api('POST', '/anonymize/text', {
+      text,
+      language: document.getElementById('anonLang').value,
+      domain:   document.getElementById('anonDomain').value,
+      profile:  document.getElementById('anonProfile').value,
+      prefix:   document.getElementById('anonPrefix').value.trim(),
+    });
+
+    _currentSid      = r.session_id;
+    _currentEntities = r.entities || [];
+    _currentAnonText = r.anonymized_text || '';
+
+    renderAnonResult(r);
+    saveSessionRecord(r);
+    document.getElementById('deanonSession').value = r.session_id;
+    document.getElementById('anonResults').classList.remove('hidden');
+
+  } catch (e) {
+    showAlert('anonErr', e.message);
+  } finally {
+    setBusy('anonBtn', false, 'Anonymize');
+    hideProgress('anonProgress');
+  }
+}
+
+function renderStats(elId, summary, byType) {
+  const summaryHtml = `<div class="stats-bar">${
+    summary.map(([n, l]) => `<div class="stat"><div class="stat-n">${n}</div><div class="stat-l">${l}</div></div>`).join('')
+  }</div>`;
+  const entries = Object.entries(byType || {});
+  const typesHtml = entries.length ? `<div class="stats-types">${
+    entries.map(([t, n]) =>
+      `<div class="stat-type ${ecls(t)}"><div class="stat-type-n">${n}</div><div class="stat-type-l">${esc(t)}</div></div>`
+    ).join('')
+  }</div>` : '';
+  document.getElementById(elId).innerHTML = summaryHtml + typesHtml;
+}
+
+function renderAnonResult(r) {
+  // Stats
+  const byType = r.by_type || {};
+  renderStats('anonStats', [
+    [r.total_entities,      'Detected'],
+    [r.entities_confirmed,  'Confirmed'],
+    [r.unique_entities,     'Unique'],
+    [r.processing_time_ms + 'ms', 'Time'],
+  ], byType);
+
+  // Session ID
+  document.getElementById('anonSessionId').textContent = r.session_id;
+
+  // Highlighted anonymized text
+  document.getElementById('anonOut').innerHTML = highlightPlaceholders(r.anonymized_text, r.entities);
+
+  // Entity badges
+  const tags = (r.entities || []).map(e =>
+    `<span class="tag ${ecls(e.type)}" title="Score: ${Math.round(e.score * 100)}%">${esc(e.placeholder)} <small style="opacity:.7;font-weight:400">${esc(e.type)}</small></span>`
+  ).join('');
+  document.getElementById('anonTags').innerHTML = tags;
+
+  // Entity table
+  const rows = (r.entities || []).map(e => `
+    <tr>
+      <td><span class="tag ${ecls(e.type)}">${esc(e.placeholder)}</span></td>
+      <td>${esc(e.type)}</td>
+      <td>${Math.round(e.score * 100)}%</td>
+    </tr>
+  `).join('');
+  document.getElementById('anonTableBody').innerHTML = rows || '<tr><td colspan="3" style="color:var(--muted)">No entities confirmed</td></tr>';
+
+  // Review button
+  document.getElementById('anonReviewBtn').style.display = 'inline-flex';
+}
+
+async function startReview() {
+  if (!_currentSid) return;
+  try {
+    const r = await api('POST', `/review/${_currentSid}/start`);
+    if (r.url) window.open(r.url, '_blank');
+  } catch (e) { toast(e.message, 'error'); }
+}
+
+async function deanonFromResult() {
+  if (!_currentSid || !_currentAnonText) return;
+  await doDeanon(_currentSid, _currentAnonText, 'anonDeanonOut', 'anonDeanonCard', 'anonErr');
+}
+
+// ── Deanonymize mode toggle ───────────────────────────────────────────────────
+let _deanonMode = 'text';   // 'text' | 'file'
+let _deanonFile = null;     // File object selected for file mode
+
+function setDeanonMode(mode) {
+  _deanonMode = mode;
+  document.getElementById('deanonModeText').classList.toggle('active', mode === 'text');
+  document.getElementById('deanonModeFile').classList.toggle('active', mode === 'file');
+  document.getElementById('deanonTextMode').style.display = mode === 'text' ? '' : 'none';
+  document.getElementById('deanonFileMode').style.display = mode === 'file' ? '' : 'none';
+  // Reset result panel
+  document.getElementById('deanonEmpty').style.display = '';
+  document.getElementById('deanonOut').style.display = 'none';
+  document.getElementById('deanonCopyBtn').classList.add('hidden');
+  document.getElementById('deanonDownloadBtn').classList.add('hidden');
+}
+
+function deanonFileChosen(f) {
+  if (!f) return;
+  _deanonFile = f;
+  const label = document.getElementById('deanonFileName');
+  label.textContent = f.name;
+  label.style.display = '';
+}
+
+function handleDeanonDrop(event) {
+  event.preventDefault();
+  document.getElementById('deanonDropZone').classList.remove('drag-over');
+  const f = event.dataTransfer.files[0];
+  if (f) deanonFileChosen(f);
+}
+
+// ── Deanonymize ───────────────────────────────────────────────────────────────
+async function runDeanonymize() {
+  const sid  = document.getElementById('deanonSession').value.trim();
+  const text = document.getElementById('deanonInput').value.trim();
+  if (!sid || !text) { toast('Session ID and text are required', 'warn'); return; }
+  setBusy('deanonBtn', true);
+  hideAlert('deanonErr');
+  await showProgress('deanonProgress', 'Restoring PII from session mapping…');
+  await doDeanon(sid, text, 'deanonOut', 'deanonResult', 'deanonErr');
+  setBusy('deanonBtn', false, 'Restore PII');
+  hideProgress('deanonProgress');
+}
+
+async function runDeanonymizeFile() {
+  const sid = document.getElementById('deanonSession').value.trim();
+  if (!sid) { toast('Session ID is required', 'warn'); return; }
+  if (!_deanonFile) { toast('Select a file first', 'warn'); return; }
+  setBusy('deanonFileBtn', true);
+  hideAlert('deanonErr');
+  await showProgress('deanonProgress', 'Restoring PII in document…');
+  try {
+    const fd = new FormData();
+    fd.append('file', _deanonFile);
+    fd.append('session_id', sid);
+    const resp = await fetch('/deanonymize/upload', { method: 'POST', body: fd });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({ detail: resp.statusText }));
+      throw new Error(err.detail || resp.statusText);
+    }
+    const r = await resp.json();
+    document.getElementById('deanonCount').textContent = r.entities_restored;
+    document.getElementById('deanonResult').classList.remove('hidden');
+    document.getElementById('deanonEmpty').style.display = 'none';
+    // Show inline text if returned (text files), or just the download button for .docx
+    const outEl = document.getElementById('deanonOut');
+    if (r.restored_text) {
+      outEl.textContent = r.restored_text;
+      outEl.style.display = '';
+      document.getElementById('deanonCopyBtn').classList.remove('hidden');
+    } else {
+      outEl.style.display = 'none';
+    }
+    // Always show download button
+    const dlBtn = document.getElementById('deanonDownloadBtn');
+    dlBtn.href = r.download_url;
+    dlBtn.download = `restored_${r.original_filename || sid}`;
+    dlBtn.classList.remove('hidden');
+    toast('PII restored', 'success');
+  } catch (e) {
+    showAlert('deanonErr', e.message);
+  }
+  setBusy('deanonFileBtn', false, 'Restore PII from File');
+  hideProgress('deanonProgress');
+}
+
+async function doDeanon(sid, text, outId, cardId, errId) {
+  try {
+    const r = await api('POST', '/deanonymize/preview', { text, session_id: sid });
+    const outEl = document.getElementById(outId);
+    outEl.textContent = r.restored_text;
+    const countEl = document.getElementById('deanonCount');
+    if (countEl) countEl.textContent = r.entities_restored;
+    document.getElementById(cardId).classList.remove('hidden');
+    // Show output, hide placeholder
+    const emptyEl = document.getElementById('deanonEmpty');
+    if (emptyEl) emptyEl.style.display = 'none';
+    outEl.style.display = '';
+    if (outId === 'deanonOut') {
+      document.getElementById('deanonCopyBtn').classList.remove('hidden');
+      document.getElementById('deanonDownloadBtn').classList.add('hidden');
+    }
+    toast('PII restored', 'success');
+  } catch (e) {
+    showAlert(errId, e.message);
+  }
+}
+
+// ── Sessions ──────────────────────────────────────────────────────────────────
+async function lookupSession() {
+  const sid = document.getElementById('sessInput').value.trim();
+  if (!sid) { toast('Enter a session ID', 'warn'); return; }
+  hideAlert('sessErr');
+  document.getElementById('sessResult').classList.add('hidden');
+  try {
+    const r = await api('GET', `/sessions/${sid}`);
+    document.getElementById('sessStats').innerHTML = `
+      <div class="stat"><div class="stat-n">${r.total_entities}</div><div class="stat-l">Entities</div></div>
+      <div class="stat"><div class="stat-n">${esc(sid)}</div><div class="stat-l">Session ID</div></div>
+    `;
+    const tags = Object.entries(r.placeholders || {}).map(([ph, type]) =>
+      `<span class="tag ${ecls(type)}" title="${esc(type)}">${esc(ph)}</span>`
+    ).join('');
+    document.getElementById('sessTags').innerHTML = tags || '<span style="color:var(--muted)">None</span>';
+    document.getElementById('sessResult').classList.remove('hidden');
+    // Show Download button if this is a known file session
+    const sessions = getSessions();
+    const s = sessions.find(x => x.id === sid);
+    const dlBtn = document.getElementById('sessDownloadBtn');
+    if (dlBtn) dlBtn.classList.toggle('hidden', !(s && s.is_file));
+  } catch (e) {
+    showAlert('sessErr', e.message);
+  }
+}
+
+// ── Profiles ──────────────────────────────────────────────────────────────────
+let _editingProfile = null;  // name of profile currently loaded in form
+
+function loadProfileIntoForm(p) {
+  _editingProfile = p.name;
+  document.getElementById('pfName').value         = p.name;
+  document.getElementById('pfDesc').value         = p.description || '';
+  document.getElementById('pfDomain').value       = p.base_domain || 'general';
+  document.getElementById('pfScore').value        = p.min_score != null ? p.min_score : '';
+  document.getElementById('pfStoplist').value     = (p.extra_stoplist || []).join('\n');
+  document.getElementById('pfPatterns').value     = p.custom_patterns && p.custom_patterns.length
+    ? JSON.stringify(p.custom_patterns, null, 2) : '';
+
+  document.getElementById('pfCardTitle').textContent = 'Edit Profile';
+  document.getElementById('pfSaveBtn').textContent   = 'Update Profile';
+  document.getElementById('pfNewBtn').style.display  = 'inline-flex';
+  const banner = document.getElementById('pfEditBanner');
+  banner.textContent = `Editing: ${p.name}`;
+  banner.style.display = 'block';
+  hideAlert('pfMsg');
+
+  // Highlight selected item in list
+  document.querySelectorAll('.profile-item').forEach(el =>
+    el.classList.toggle('profile-selected', el.dataset.name === p.name)
+  );
+
+  // Scroll form into view
+  document.getElementById('pfCardTitle').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function clearProfileForm() {
+  _editingProfile = null;
+  document.getElementById('pfName').value     = '';
+  document.getElementById('pfDesc').value     = '';
+  document.getElementById('pfDomain').value   = 'general';
+  document.getElementById('pfScore').value    = '';
+  document.getElementById('pfStoplist').value = '';
+  document.getElementById('pfPatterns').value = '';
+
+  document.getElementById('pfCardTitle').textContent = 'New Profile';
+  document.getElementById('pfSaveBtn').textContent   = 'Save Profile';
+  document.getElementById('pfNewBtn').style.display  = 'none';
+  document.getElementById('pfEditBanner').style.display = 'none';
+  hideAlert('pfMsg');
+
+  document.querySelectorAll('.profile-item').forEach(el => el.classList.remove('profile-selected'));
+}
+
+async function loadProfiles() {
+  const el = document.getElementById('profileList');
+  el.innerHTML = '<div class="empty">Loading…</div>';
+  try {
+    const { profiles } = await api('GET', '/profiles');
+    if (!profiles.length) {
+      el.innerHTML = '<div class="empty">No profiles yet. Create one on the right.</div>';
+    } else {
+      el.innerHTML = profiles.map(p => `
+        <div class="profile-item${_editingProfile === p.name ? ' profile-selected' : ''}"
+             data-name="${esc(p.name)}"
+             onclick="loadProfileIntoForm(${esc(JSON.stringify(p))})"
+             title="Click to edit">
+          <div style="flex:1;min-width:0">
+            <div class="profile-name">${esc(p.name)}</div>
+            <div class="profile-meta">
+              ${esc(p.base_domain)} ·
+              ${p.extra_stoplist_count} stoplist terms ·
+              ${p.custom_patterns_count} patterns
+              ${p.min_score != null ? ` · min score ${p.min_score}` : ''}
+            </div>
+            ${p.description ? `<div class="profile-meta" style="font-style:italic">${esc(p.description)}</div>` : ''}
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteProfile('${esc(p.name)}')">Delete</button>
+        </div>
+      `).join('');
+    }
+    // Sync profile dropdowns on Anonymize and Upload tabs
+    ['anonProfile', 'uploadProfile'].forEach(selId => {
+      const sel = document.getElementById(selId);
+      const prev = sel.value;
+      sel.innerHTML = '<option value="">— none —</option>';
+      profiles.forEach(p => {
+        const o = document.createElement('option');
+        o.value = p.name; o.textContent = `${p.name} (${p.base_domain})`;
+        if (p.name === prev) o.selected = true;
+        sel.appendChild(o);
+      });
+    });
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Error: ${esc(e.message)}</div>`;
+  }
+}
+
+async function saveProfile() {
+  const name = document.getElementById('pfName').value.trim();
+  if (!name) { showAlert('pfMsg', 'Name is required.'); return; }
+
+  let custom_patterns = [];
+  const patternsRaw = document.getElementById('pfPatterns').value.trim();
+  if (patternsRaw) {
+    try { custom_patterns = JSON.parse(patternsRaw); }
+    catch { showAlert('pfMsg', 'Custom Patterns must be valid JSON array.'); return; }
+  }
+
+  const stoplistRaw = document.getElementById('pfStoplist').value;
+  const extra_stoplist = stoplistRaw.split('\n').map(s => s.trim()).filter(Boolean);
+
+  const scoreRaw = document.getElementById('pfScore').value;
+  const body = {
+    name,
+    description: document.getElementById('pfDesc').value.trim(),
+    base_domain:  document.getElementById('pfDomain').value,
+    extra_stoplist,
+    custom_patterns,
+    min_score: scoreRaw ? parseFloat(scoreRaw) : null,
+  };
+
+  try {
+    await api('POST', '/profiles', body);
+    const verb = _editingProfile === name ? 'updated' : 'saved';
+    showAlert('pfMsg', `Profile "${name}" ${verb}.`, 'success');
+    _editingProfile = name;  // stay in edit mode for this profile
+    document.getElementById('pfCardTitle').textContent = 'Edit Profile';
+    document.getElementById('pfSaveBtn').textContent   = 'Update Profile';
+    document.getElementById('pfNewBtn').style.display  = 'inline-flex';
+    const banner = document.getElementById('pfEditBanner');
+    banner.textContent = `Editing: ${name}`;
+    banner.style.display = 'block';
+    await loadProfiles();
+  } catch (e) {
+    showAlert('pfMsg', e.message);
+  }
+}
+
+async function deleteProfile(name) {
+  if (!confirm(`Delete profile "${name}"? This cannot be undone.`)) return;
+  try {
+    await api('DELETE', `/profiles/${name}`);
+    toast(`Profile "${name}" deleted`, 'success');
+    if (_editingProfile === name) clearProfileForm();
+    await loadProfiles();
+  } catch (e) { toast(e.message, 'error'); }
+}
+
+// ── Stoplist ──────────────────────────────────────────────────────────────────
+async function loadStoplist() {
+  const el = document.getElementById('stoplistContent');
+  el.innerHTML = '<div class="empty">Loading…</div>';
+  try {
+    const d = await api('GET', '/custom/stoplist');
+    let html = '';
+
+    // Custom stoplist
+    html += `<div class="mb-16">
+      <div class="text-box-label">Custom Stoplist (${d.custom_stoplist.length} terms)</div>
+      <div class="tag-cloud">`;
+    if (d.custom_stoplist.length) {
+      html += d.custom_stoplist.map(t => `<span class="tag c-other">${esc(t)}</span>`).join('');
+    } else {
+      html += '<span style="color:var(--muted);font-size:13px">None yet — add terms to stoplist.txt</span>';
+    }
+    html += '</div></div>';
+
+    // Learned stoplist by domain
+    const learned = d.learned_stoplist || {};
+    const domains = Object.keys(learned);
+    if (domains.length) {
+      html += `<div class="text-box-label mb-12">Learned from HITL Review</div>`;
+      domains.forEach(domain => {
+        const terms = learned[domain];
+        if (!terms.length) return;
+        html += `<div class="mb-12">
+          <div class="profile-meta" style="margin-bottom:6px">${esc(domain)} (${terms.length} terms)</div>
+          <div class="tag-cloud">${terms.map(t => `<span class="tag c-location">${esc(t)}</span>`).join('')}</div>
+        </div>`;
+      });
+    } else {
+      html += `<div class="text-box-label mb-12">Learned from HITL Review</div>
+        <div style="color:var(--muted);font-size:13px">None yet. Remove false positives during entity review to auto-learn them.</div>`;
+    }
+
+    el.innerHTML = html;
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Error: ${esc(e.message)}</div>`;
+  }
+}
+
+async function reloadTerms() {
+  hideAlert('stoplistMsg');
+  try {
+    const r = await api('POST', '/custom/reload');
+    const domains = (r.reloaded_domains || []).join(', ') || 'none active yet';
+    showAlert('stoplistMsg', `Reloaded: ${domains}`, 'success');
+    await loadStoplist();
+  } catch (e) {
+    showAlert('stoplistMsg', e.message);
+  }
+}
+
+// ── File Upload ───────────────────────────────────────────────────────────────
+let _uploadSid = null;
+let _uploadHasDocx = false;
+
+function initDropZone() {
+  const zone = document.getElementById('dropZone');
+  const input = document.getElementById('fileInput');
+  const label = document.getElementById('dropFilename');
+
+  input.addEventListener('change', () => {
+    if (input.files[0]) {
+      label.textContent = '📎 ' + input.files[0].name;
+      label.style.display = 'block';
+    }
+  });
+
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('over');
+    const f = e.dataTransfer.files[0];
+    if (f) {
+      // Create a DataTransfer to assign to the input
+      const dt = new DataTransfer();
+      dt.items.add(f);
+      input.files = dt.files;
+      label.textContent = '📎 ' + f.name;
+      label.style.display = 'block';
+    }
+  });
+}
+
+async function runUpload() {
+  const input = document.getElementById('fileInput');
+  if (!input.files[0]) { toast('Select a file first', 'warn'); return; }
+
+  setBusy('uploadBtn', true);
+  hideAlert('uploadErr');
+  document.getElementById('uploadResults').classList.add('hidden');
+  await showProgress('uploadProgress', 'Uploading and anonymizing — this may take a moment…');
+
+  try {
+    const fd = new FormData();
+    fd.append('file',     input.files[0]);
+    fd.append('language', document.getElementById('uploadLang').value);
+    fd.append('domain',   document.getElementById('uploadDomain').value);
+    fd.append('profile',  document.getElementById('uploadProfile').value);
+    fd.append('prefix',   document.getElementById('uploadPrefix').value.trim());
+
+    const res = await fetch('/anonymize/upload', { method: 'POST', body: fd });
+    const r = await res.json();
+    if (!res.ok) throw new Error(r.detail || `HTTP ${res.status}`);
+
+    _uploadSid = r.session_id;
+    _uploadHasDocx = !!r.docx_output_path;
+
+    renderUploadResult(r);
+    saveSessionRecord({ ...r, anonymized_text: `[file: ${r.original_filename}]` });
+    document.getElementById('deanonSession').value = r.session_id;
+    document.getElementById('uploadResults').classList.remove('hidden');
+    toast('File anonymized successfully', 'success');
+
+  } catch (e) {
+    showAlert('uploadErr', e.message);
+  } finally {
+    setBusy('uploadBtn', false, 'Anonymize File');
+    document.getElementById('uploadProgress').style.display = 'none';
+  }
+}
+
+function renderUploadResult(r) {
+  const byType = r.by_type || {};
+  renderStats('uploadStats', [
+    [r.total_entities,           'Entities'],
+    [r.unique_entities,          'Unique'],
+    [r.processing_time_ms + 'ms','Time'],
+  ], byType);
+  document.getElementById('uploadSessionId').textContent = r.session_id;
+
+  // Show docx download button if available
+  document.getElementById('downloadDocxBtn').style.display = r.docx_output_path ? 'inline-flex' : 'none';
+
+  // Entity type badges from by_type
+  const tags = Object.entries(byType).map(([t, n]) =>
+    `<span class="tag ${ecls(t)}">${esc(t)} <small style="opacity:.7">${n}</small></span>`
+  ).join('');
+  document.getElementById('uploadTags').innerHTML = tags || '<span style="color:var(--muted)">None detected</span>';
+
+  // Table rows from by_type
+  const rows = Object.entries(byType).map(([t, n]) => `
+    <tr><td><span class="tag ${ecls(t)}">${esc(t)}</span></td><td>${esc(t)}</td><td>${n}</td></tr>
+  `).join('');
+  document.getElementById('uploadTableBody').innerHTML = rows;
+}
+
+function downloadFile(preferDocx) {
+  if (!_uploadSid) return;
+  const url = `/download/${_uploadSid}${preferDocx ? '?docx=true' : ''}`;
+  const a = document.createElement('a');
+  a.href = url; a.download = ''; a.click();
+}
+
+async function startUploadReview() {
+  if (!_uploadSid) return;
+  try {
+    const r = await api('POST', `/review/${_uploadSid}/start`);
+    if (r.url) {
+      window.open(r.url, '_blank');
+      // Start polling for review completion
+      pollReviewStatus(_uploadSid);
+    }
+  } catch (e) { toast(e.message, 'error'); }
+}
+
+let _reviewPollTimer = null;
+function pollReviewStatus(sid) {
+  clearTimeout(_reviewPollTimer);
+  _reviewPollTimer = setInterval(async () => {
+    try {
+      const r = await api('GET', `/review/${sid}/status`);
+      if (r.status === 'approved') {
+        clearInterval(_reviewPollTimer);
+        const msgEl = document.getElementById('reviewStatusMsg');
+        if (r.has_changes) {
+          msgEl.className = 'alert alert-info show';
+          msgEl.textContent = 'Review approved with changes. Click "Apply Review & Re-download" to get the corrected file.';
+          document.getElementById('reapplyBtn').classList.remove('hidden');
+        } else {
+          msgEl.className = 'alert alert-success show';
+          msgEl.textContent = 'Review approved — no changes made. Original anonymized file is correct.';
+        }
+      }
+    } catch { clearInterval(_reviewPollTimer); }
+  }, 3000);
+}
+
+async function reapplyReview() {
+  if (!_uploadSid) return;
+  const btn = document.getElementById('reapplyBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Re-anonymizing…';
+  await showProgress('uploadProgress', 'Applying review changes and re-anonymizing…');
+
+  try {
+    const r = await api('POST', `/reapply/${_uploadSid}`);
+    // Update to new session
+    const prevSid = _uploadSid;
+    _uploadSid = r.session_id;
+    _uploadHasDocx = !!r.docx_output_path;
+
+    document.getElementById('uploadSessionId').textContent = r.session_id;
+    document.getElementById('deanonSession').value = r.session_id;
+    renderUploadResult(r);
+
+    const msgEl = document.getElementById('reviewStatusMsg');
+    msgEl.className = 'alert alert-success show';
+    msgEl.textContent = `Done — new session ${r.session_id}. Download the corrected file below.`;
+    document.getElementById('reapplyBtn').classList.add('hidden');
+    toast('File re-anonymized with review changes', 'success');
+
+  } catch (e) {
+    toast(e.message, 'error');
+    btn.disabled = false;
+    btn.innerHTML = '✓ Apply Review &amp; Re-download';
+  } finally {
+    document.getElementById('uploadProgress').style.display = 'none';
+    document.getElementById('uploadProgressLabel').textContent = 'Uploading and anonymizing — this may take a moment…';
+  }
+}
+
+// ── Theme ─────────────────────────────────────────────────────────────────────
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('pii_shield_theme', theme);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = theme === 'dark' ? '◑ Light' : '◐ Dark';
+}
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Restore theme
+  const savedTheme = localStorage.getItem('pii_shield_theme') ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  applyTheme(savedTheme);
+
+  // Wire tabs
+  document.querySelectorAll('.tab-btn').forEach(btn =>
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab))
+  );
+
+  // Restore last tab
+  const lastTab = localStorage.getItem(LS_TAB) || 'anonymize';
+  switchTab(lastTab);
+
+  // Start status polling
+  pollStatus();
+
+  // Load profiles dropdowns on startup (fills both Anonymize and Upload tabs)
+  loadProfiles();
+
+  // Init drag-and-drop
+  initDropZone();
+});
+</script>
+</body>
+</html>
