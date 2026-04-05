@@ -94,7 +94,7 @@ Runtime data (session mappings, uploaded files, audit logs) is stored at `~/.pii
 
 ## Credits
 
-Built on [PII Shield](https://github.com/calgarygregory/pii-shield) by Grigorii Maskolev. Extended into a REST API and web application by Mark Monfort (Head of AI at Madison Marcus / Managing Director at Foundry Labs).
+Built on [PII Shield](https://github.com/calgarygregory/pii-shield) by Grigorii Moskalev. Extended into a REST API and web application by Mark Monfort (Head of AI at Madison Marcus / Managing Director at Foundry Labs).
 Original engine: GLiNER + Presidio + SpaCy.
 
 ---
