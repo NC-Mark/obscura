@@ -2,7 +2,7 @@
 
 **Local document anonymization — use any AI tool on sensitive documents without sensitive data ever reaching the AI.**
 
-Built on top of the excellent [PII Shield](https://github.com/calgarygregory/pii-shield) by Gregory (Calgary), extended into a full REST API and web application.
+Built on top of the excellent [PII Shield](https://github.com/gregmos/PII-Shield) by Gregory (Calgary), extended into a full REST API and web application.
 
 ---
 
