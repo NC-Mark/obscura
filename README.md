@@ -2,7 +2,7 @@
 
 **Local document anonymization — use any AI tool on sensitive documents without sensitive data ever reaching the AI.**
 
-Built on top of the excellent [PII Shield](https://github.com/gregmos/PII-Shield) by Gregory (Calgary), extended into a full REST API and web application.
+Built on top of the excellent [PII Shield](https://github.com/gregmos/PII-Shield) by Grigorii, extended into a full REST API and web application.
 
 ---
 
@@ -94,7 +94,7 @@ Runtime data (session mappings, uploaded files, audit logs) is stored at `~/.pii
 
 ## Credits
 
-Built on [PII Shield](https://github.com/calgarygregory/pii-shield) by Grigorii Moskalev. Extended into a REST API and web application by Mark Monfort (Head of AI at Madison Marcus / Managing Director at Foundry Labs).
+Built on [PII Shield](https://github.com/gregmos/pii-shield) by Grigorii Moskalev. Extended into a REST API and web application by Mark Monfort (Head of AI at Madison Marcus / Managing Director at Foundry Labs).
 Original engine: GLiNER + Presidio + SpaCy.
 
 ---
